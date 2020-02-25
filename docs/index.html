@@ -1,0 +1,313 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>IsleService Objects &mdash; isleservice_objects 0.2.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="#" class="icon icon-home"> isleservice_objects
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">IsleService Objects</a></li>
+<li><a class="reference internal" href="#development-guide">Development Guide</a></li>
+<li><a class="reference internal" href="#module-isleservice_objects.models">Models</a></li>
+<li><a class="reference internal" href="#module-isleservice_objects.schemas">Schemas</a></li>
+<li><a class="reference internal" href="#module-isleservice_objects.errors">Exceptions</a></li>
+</ul>
+</div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">isleservice_objects</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="#">Docs</a> &raquo;</li>
+        
+      <li>IsleService Objects</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="isleservice-objects">
+<h1>IsleService Objects<a class="headerlink" href="#isleservice-objects" title="Permalink to this headline">¶</a></h1>
+<p>Template for creating models, schemas and errors for services, then installed for use in
+client apps and companion services.</p>
+<p>This template is built off of <a class="reference external" href="https://illuscio-islelib-py.readthedocs-hosted.com/en/latest/">islelib</a> and shares it’s same tool suite.</p>
+</div>
+<div class="section" id="development-guide">
+<h1>Development Guide<a class="headerlink" href="#development-guide" title="Permalink to this headline">¶</a></h1>
+<p>Each objects package for a service should contain the following sub-packages:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><em>models</em>: Dataclass models for schema generation through <a href="#id1"><span class="problematic" id="id2">`grahamcracker`_</span></a></p></li>
+<li><p>schemas*: Any schemas which require custom implementation. Should always inherit
+from <code class="docutils literal notranslate"><span class="pre">grahamcracker.DataSchema</span></code> and be generated using the
+<code class="docutils literal notranslate"><span class="pre">grahamcracker.schema_for</span></code> decorator to tie it to a dataclass model</p></li>
+<li><p><em>fields</em>: <code class="docutils literal notranslate"><span class="pre">marshmallow.fields.Field</span></code> implementations required by the schemas.</p></li>
+<li><p><em>errors</em>: All errors should inherit from <code class="docutils literal notranslate"><span class="pre">spanreed.APIError</span></code></p></li>
+</ul>
+</div></blockquote>
+<p>A few development notes:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>The purpose of having a separate package for these objects is that they can be
+shared between the service itself and other client applications / services. In some
+cases it may make sense to have one objects module contain the models / errors /
+schemas for a group of microservices.</p></li>
+<li><p>The default pipeline is set up to test on Mac, Windows, and PC – unlike
+<a href="#id3"><span class="problematic" id="id4">`isleservice`_</span></a>, which by default only tests on Linux.</p></li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="module-isleservice_objects.models">
+<span id="models"></span><h1>Models<a class="headerlink" href="#module-isleservice_objects.models" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="isleservice_objects.models.Enemy">
+<em class="property">class </em><code class="sig-prename descclassname">isleservice_objects.models.</code><code class="sig-name descname">Enemy</code><span class="sig-paren">(</span><em class="sig-param">rank: str</em>, <em class="sig-param">name: isleservice_objects.models.Name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/isleservice_objects/models.html#Enemy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#isleservice_objects.models.Enemy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Information about an adversary</p>
+<dl class="method">
+<dt id="isleservice_objects.models.Enemy.addressable">
+<em class="property">property </em><code class="sig-name descname">addressable</code><a class="headerlink" href="#isleservice_objects.models.Enemy.addressable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Title and last name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="isleservice_objects.models.Enemy.name">
+<code class="sig-name descname">name</code><em class="property">: Name</em><em class="property"> = None</em><a class="headerlink" href="#isleservice_objects.models.Enemy.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Enemy’s name</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="isleservice_objects.models.Enemy.rank">
+<code class="sig-name descname">rank</code><em class="property">: str</em><em class="property"> = None</em><a class="headerlink" href="#isleservice_objects.models.Enemy.rank" title="Permalink to this definition">¶</a></dt>
+<dd><p>Military Rank</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="isleservice_objects.models.Name">
+<em class="property">class </em><code class="sig-prename descclassname">isleservice_objects.models.</code><code class="sig-name descname">Name</code><span class="sig-paren">(</span><em class="sig-param">first: str</em>, <em class="sig-param">last: str</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/isleservice_objects/models.html#Name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#isleservice_objects.models.Name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Name Info</p>
+<dl class="attribute">
+<dt id="isleservice_objects.models.Name.first">
+<code class="sig-name descname">first</code><em class="property">: str</em><em class="property"> = None</em><a class="headerlink" href="#isleservice_objects.models.Name.first" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cannot contain spaces</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="isleservice_objects.models.Name.full_name">
+<em class="property">property </em><code class="sig-name descname">full_name</code><a class="headerlink" href="#isleservice_objects.models.Name.full_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>First and last name</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="isleservice_objects.models.Name.last">
+<code class="sig-name descname">last</code><em class="property">: str</em><em class="property"> = None</em><a class="headerlink" href="#isleservice_objects.models.Name.last" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cannot Contain spaces</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-isleservice_objects.schemas">
+<span id="schemas"></span><h1>Schemas<a class="headerlink" href="#module-isleservice_objects.schemas" title="Permalink to this headline">¶</a></h1>
+</div>
+<div class="section" id="module-isleservice_objects.errors">
+<span id="exceptions"></span><h1>Exceptions<a class="headerlink" href="#module-isleservice_objects.errors" title="Permalink to this headline">¶</a></h1>
+<dl class="exception">
+<dt id="isleservice_objects.errors.CoughError">
+<em class="property">exception </em><code class="sig-prename descclassname">isleservice_objects.errors.</code><code class="sig-name descname">CoughError</code><span class="sig-paren">(</span><em class="sig-param">message</em>, <em class="sig-param">error_data=None</em>, <em class="sig-param">error_id=None</em>, <em class="sig-param">send_media=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/isleservice_objects/errors.html#CoughError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#isleservice_objects.errors.CoughError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Your got a hand cut off!</p>
+<dl class="attribute">
+<dt id="isleservice_objects.errors.CoughError.api_code">
+<code class="sig-name descname">api_code</code><em class="property">: int</em><em class="property"> = 1100</em><a class="headerlink" href="#isleservice_objects.errors.CoughError.api_code" title="Permalink to this definition">¶</a></dt>
+<dd><p>api code</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="isleservice_objects.errors.CoughError.http_code">
+<code class="sig-name descname">http_code</code><em class="property">: int</em><em class="property"> = 400</em><a class="headerlink" href="#isleservice_objects.errors.CoughError.http_code" title="Permalink to this definition">¶</a></dt>
+<dd><p>response code</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright &#39;2018, Illuscio&#39;
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
